@@ -1,118 +1,37 @@
 body {
-    background-color: navajowhite;
+    background-color: #fdf4e8;
 }
 
-
-.form-title {
-    color:red;
-    margin: 10px;
-    font-size: 30px;
-    font-family: "56th Street" ;
-}
-#conv {
-    color:red;
-    margin: 30px;
-    font-size: 30px;
-    font-family: "56th Street";
-    margin:20px 300px;
+.page-container .tabs-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-
-.form-table {
-    margin-top:50px;
-    background-color:lightgrey;
-    border: 3px solid firebrick;
-    width: 500px;
-    height: 200px;
-   margin-left:30px;
-}
-label {
-    color:seagreen;
-    font-family: "56th Street" sens;
-    font-size: 24px;
+.navigation-tabs {
+    display: flex;
 }
 
-.knopka {
-    background:lightcoral;
-    width: 150px;
-    height: 30px;
-    margin:10px 80px;
-    font-size:18px;
-    font-family: "Times New Roman";
+.tabs-content .tab-content {
+    width: 50%;
+}
+
+.navigation-tabs .navigation-tab {
+    padding: 8px 16px;
+    background: white;
+    border-radius: 4px 0 0 4px;
+    border: 2px solid red;
+    color: black;
+    flex: 0 1 50%;
+    font-size: 28px;
     cursor: pointer;
 }
 
-.knopka:hover {
-    color:blue;
-    border: 3px solid deeppink;
+.navigation-tab + .navigation-tab {
+    border-radius: 0 4px 4px 0;
 }
 
-.is {
-    background: lightgrey;
-    margin-left:30px;
-    height:18px;
-    width:150px;
-    color:darkslateblue;
-    font-weight: bold;
-    font-size:15px;
+.navigation-tab.active {
+    background: red;
+    color: white;
 }
-
-
-
-#from {
-    background: lightgrey;
-    margin-left:30px;
-    height:22px;
-    width:150px;
-    color:darkslateblue;
-    font-weight: bold;
-    font-size:15px;
-}
-
-
-
-#to {
-    background: lightgrey;
-    margin-left:30px;
-    height:22px;
-    width:150px;
-    color:darkslateblue;
-    font-weight: bold;
-    font-size:15px;
-}
-
-
-#result {
-    color:black;
-    font-family:"Times New Roman";
-    font-size: 25px;
-    font-width: bold;
-}
-
-
-
-.tabs { width: 100%; padding: 0px; margin: 0 auto; }
-.tabs>input { display: none; }
-.tabs>div {
-    display: none;
-    padding: 12px;
-    border: 1px solid black;
-    width: 550px;
-}
-.tabs>label {
-    display: inline-block;
-    padding: 7px;
-    margin: 0 -5px -1px 0;
-    text-align: center;
-    color: #666666;
-    border: 1px solid #C0C0C0;
-    background: lightyellow;
-    cursor: pointer;
-}
-.tabs>input:checked + label {
-    color: #000000;
-    background: hotpink;
-}
-#tab_1:checked ~ #txt_1,
-#tab_2:checked ~ #txt_2,
-#tab_4:checked ~ #txt_4 { display: block; }
