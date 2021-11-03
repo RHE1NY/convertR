@@ -1,0 +1,74 @@
+.currency-convertor-form {
+    background-color: #fcefdf;
+    height: 200px;
+    border-radius: 4px;
+    border: 2px solid red;
+    margin-top: 50px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.currency-convertor-form .form-label {
+    min-width: 200px;
+}
+
+.currency-convertor-form .form-converter {
+    display: flex;
+}
+
+.form-converter .form-side {
+    flex: 1 0 50%;
+}
+
+.currency-convertor-form .convert-btn {
+    margin-top: 24px;
+    align-items: center;
+    background-clip: padding-box;
+    background-color: #fa6400;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    justify-content: center;
+    line-height: 1.25;
+    min-height: 3rem;
+    padding: calc(.875rem - 1px) calc(1.5rem - 1px);
+    position: relative;
+    text-decoration: none;
+    transition: all 250ms;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: baseline;
+    width: auto;
+}
+
+.convert-btn:hover,
+.convert-btn:focus {
+    background-color: #fb8332;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+}
+
+.convert-btn:hover {
+    transform: translateY(-1px);
+}
+
+.convert-btn:active {
+    background-color: #c85000;
+    box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
+    transform: translateY(0);
+}
+
+.currency-convertor-form .convert-result {
+    margin-top: 16px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+}
