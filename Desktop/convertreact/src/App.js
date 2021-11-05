@@ -1,143 +1,73 @@
-import React, {useState, useEffect, useMemo} from 'react'
-import './main.css'
-import CurrencySelector from "./components/currencySelector/currencySelector";
-import ConvertorForm from "./components/convertor/convertorForm";
-import ConvertsHistory from "./components/convertsHistory/convertsHistory";
-import axios from 'axios'
-
-
-export const navigationTabs = [
-    {
-        name: 'Конвертация'
-    },
-    {
-        name: 'История конвертаций'
-    },
-]
-
+import React, {useState, useEffect} from 'react'
+import classes from './main.css'
+import Myselect from "./myselect";
+import Myselectfrom from "./Myselectfrom";
 
 function App() {
-    const [currencies, setCurrencies] = useState([]);
-    const [fromCurrency, setFromCurrency] = useState();
-    const [toCurrency, setToCurrency] = useState();
-    const [cashBeforeConvert, setCashBeforeConvert] = useState(0);
-    const [cashAfterConvert, setCashAfterConvert] = useState(0);
-    const [activeTab, setActiveTab] = useState(navigationTabs[0].name);
-    const [operationsHistory, setOperationsHistory] = useState([]); // эту историю ты выводишь когда активна вторая таба c историей
+
+    const [convert, setConvert] = useState([]);
+    const [fromCurrency, setfromCurrency] = useState();
+    const [toCurrency, settoCurrency] = useState();
+    const [cash, setCash] = useState(0);
+    const [exchange, setExchange] = useState(0);
+
+    const base_URl = "http://api.exchangeratesapi.io/v1/latest?access_key=4fdc37adda39c438294529349707fadb"
 
 
-    const base_URL = "http://api.exchangeratesapi.io/v1/latest?access_key=bfd8f810c5a8f1cc1c0bfc183a84aea9";
-    const convert_URL = "https://api.m3o.com/v1/currency/Convert?from=FROM_CURRENCY&to=TO_CURRENCY&amount=AMOUNT";
+    function Convertion(){
 
+        setCash(cash[fromCurrency] * exchange / cash[toCurrency], 2);
 
-
-    {/* async function convertCurrencyy() {
-     await axios.get("https://api.m3o.com/v1/currency/Convert?from=FROM_CURRENCY&to=TO_CURRENCY&amount=AMOUNT", {
-            headers: {
-                'Authorization': 'Bearer NDE0ZTlkN2EtNzY1Ny00MmI2LWExYjAtMzQxMjQ2OWMwNTc4',
-                'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': true,
-            }
-        })
-         axios.post('/FROM_CURRENCY', {fromCurrency})
-        axios.post('/TO_CURRENCY', {fromCurrency})
-         axios.put('/amount', cashBeforeConvert.toString())
-         .then(res => res.json())
-            .then(data => {
-                data.amount && setCashAfterConvert(data.amount)
-            })
-        setOperationsHistory([{
-            time: new Date().toLocaleDateString(),
-            fromCurrency: fromCurrency,
-            fromCash: cashBeforeConvert,
-            toCurrency: toCurrency,
-            toCash: cashAfterConvert
-        }, ...operationsHistory])
-             } */}
-
-    const convertCurrency = () => {
-        fetch(convert_URL.replace('FROM_CURRENCY', fromCurrency)
-            .replace('TO_CURRENCY', toCurrency)
-            .replace('AMOUNT', cashBeforeConvert.toString()), {
-            headers: new Headers({
-                'Authorization': 'Bearer NDE0ZTlkN2EtNzY1Ny00MmI2LWExYjAtMzQxMjQ2OWMwNTc4'
-            })
-        })
-            .then(res => res.json())
-            .then(data => {
-                data.amount && setCashAfterConvert(data.amount)
-            })
-        setOperationsHistory([{
-            time: new Date().toLocaleDateString(),
-            fromCurrency: fromCurrency,
-            fromCash: cashBeforeConvert,
-            toCurrency: toCurrency,
-            toCash: cashAfterConvert
-        }, ...operationsHistory])
+        console.log (exchange);
     }
 
+ useEffect(() => {
+ fetch(base_URl)
+     .then(res=>res.json())
+     .then(data=> {
+         const currency = Object.keys(data.rates)[0]
+         setConvert([data.base, ...Object.keys(data.rates)])
+          setfromCurrency(data.base)
+           settoCurrency(currency)
+           setExchange(data.rates[currency]);
 
-
-
-    useEffect(() => {
-        fetch(base_URL)
-            .then(res => res.json())
-            .then(data => {
-                const currenciesList = Object.keys(data.rates);
-                const firstCurrencyFrom = currenciesList[0]
-                setFromCurrency(data.base)
-                setToCurrency(firstCurrencyFrom)
-                setCurrencies(currenciesList)
-
-            })
+     })
     }, [])
 
 
-    const displayActiveTabContent = () => {
-        switch (activeTab) {
-            case navigationTabs[0].name:
-                return <ConvertorForm currencies={currencies}
-                                      cashAfterConvert={cashAfterConvert}
-                                      convertCurrency={convertCurrency}
-                                      fromCurrency={fromCurrency}
-                                      setFromCurrency={setFromCurrency}
-                                      setToCurrency={setToCurrency}
-                                      toCurrency={toCurrency}
-                                      setCashBeforeConvert={setCashBeforeConvert}
-                                      cashBeforeConvert={cashBeforeConvert} />;
-            case navigationTabs[1].name:
-                return <ConvertsHistory
-                  operationsHistory={operationsHistory}
-                  fromCurrency={fromCurrency}
-                  setFromCurrency={setFromCurrency}
-                  setToCurrency={setToCurrency}
-                  toCurrency={toCurrency}
-                  cashAfterConvert={cashAfterConvert}
-                  cashBeforeConvert={cashBeforeConvert}
-                  setOperationsHistory={setOperationsHistory}
-                />;
-            default: return null
-        }
-
-    }
 
 
+  return (
+    <div className="App">
+            <div>
+                <h1 className="tab_1" style={{marginLeft: "30px", fontSize:"35px"}}>Конвертации</h1>
+                <h1 className="tab_2" style={{margin: "-60px 260px", }}>История</h1>
+                <br/>
+                <br/>
+                <div className="form-table">
+                <input type="text"
+                       cash={cash}
 
-
-    return (
-        <div className="page-container">
-            <div className={'navigation-tabs'}>
-                {navigationTabs.map(navTab => <div key={navTab.name}
-                                                   onClick={() => setActiveTab(navTab.name)}
-                                                   className={`navigation-tab ${activeTab === navTab.name ? 'active' : ''}`}>
-                    {navTab.name}
-                </div>)}
+                       placeholder="Введите значение"
+                />
+ <Myselect
+     convert = {convert}
+     selectedCurrency={fromCurrency}
+     changeCurrency={e=>setfromCurrency(e.target.value)}
+ />
+                <br/>
+                <label>Выберите валюту для обмена:</label>
+                <Myselect
+                    selectedCurrency={toCurrency}
+                    convert = {convert}
+                    changeCurrency={e=>settoCurrency(e.target.value)}
+                />
+                <button className="knopka" onClick={Convertion}>Конвертировать</button>
+                    <label>{cash}</label>
+                </div>
             </div>
-            <div className={'tabs-content'}>
-                {displayActiveTabContent()}
             </div>
-        </div>
-    );
+  );
 }
 
 export default App;
