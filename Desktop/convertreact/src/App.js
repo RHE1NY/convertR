@@ -24,48 +24,19 @@ function App() {
     const [cashAfterConvert, setCashAfterConvert] = useState(0);
     const [activeTab, setActiveTab] = useState(navigationTabs[0].name);
     const [operationsHistory, setOperationsHistory] = useState([]); // эту историю ты выводишь когда активна вторая таба c историей
-    
+
     const base_URL = "http://api.exchangeratesapi.io/v1/latest?access_key=bfd8f810c5a8f1cc1c0bfc183a84aea9";
     const convert_URL = "https://api.m3o.com/v1/currency/Convert?from=FROM_CURRENCY&to=TO_CURRENCY&amount=AMOUNT";
 
 
-
-    {/* async function convertCurrencyy() {
-     await axios.get("https://api.m3o.com/v1/currency/Convert?from=FROM_CURRENCY&to=TO_CURRENCY&amount=AMOUNT", {
+    async function convertCurrency() {
+        await axios.get(`https://api.m3o.com/v1/currency/Convert?from=${fromCurrency}&to=${toCurrency}&amount=${cashBeforeConvert.toString()}`, {
             headers: {
                 'Authorization': 'Bearer NDE0ZTlkN2EtNzY1Ny00MmI2LWExYjAtMzQxMjQ2OWMwNTc4',
-                'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': true,
             }
+        }).then(res => {
+            res.data.amount && setCashAfterConvert(res.data.amount)
         })
-         axios.post('/FROM_CURRENCY', {fromCurrency})
-        axios.post('/TO_CURRENCY', {fromCurrency})
-         axios.put('/amount', cashBeforeConvert.toString())
-         .then(res => res.json())
-            .then(data => {
-                data.amount && setCashAfterConvert(data.amount)
-            })
-        setOperationsHistory([{
-            time: new Date().toLocaleDateString(),
-            fromCurrency: fromCurrency,
-            fromCash: cashBeforeConvert,
-            toCurrency: toCurrency,
-            toCash: cashAfterConvert
-        }, ...operationsHistory])
-             } */}
-
-    const convertCurrency = () => {
-        fetch(convert_URL.replace('FROM_CURRENCY', fromCurrency)
-            .replace('TO_CURRENCY', toCurrency)
-            .replace('AMOUNT', cashBeforeConvert.toString()), {
-            headers: new Headers({
-                'Authorization': 'Bearer NDE0ZTlkN2EtNzY1Ny00MmI2LWExYjAtMzQxMjQ2OWMwNTc4'
-            })
-        })
-            .then(res => res.json())
-            .then(data => {
-                data.amount && setCashAfterConvert(data.amount)
-            })
         setOperationsHistory([{
             time: new Date().toLocaleDateString(),
             fromCurrency: fromCurrency,
@@ -74,9 +45,6 @@ function App() {
             toCash: cashAfterConvert
         }, ...operationsHistory])
     }
-
-
-
 
     useEffect(() => {
         fetch(base_URL)
@@ -103,24 +71,23 @@ function App() {
                                       setToCurrency={setToCurrency}
                                       toCurrency={toCurrency}
                                       setCashBeforeConvert={setCashBeforeConvert}
-                                      cashBeforeConvert={cashBeforeConvert} />;
+                                      cashBeforeConvert={cashBeforeConvert}/>;
             case navigationTabs[1].name:
                 return <ConvertsHistory
-                  operationsHistory={operationsHistory}
-                  fromCurrency={fromCurrency}
-                  setFromCurrency={setFromCurrency}
-                  setToCurrency={setToCurrency}
-                  toCurrency={toCurrency}
-                  cashAfterConvert={cashAfterConvert}
-                  cashBeforeConvert={cashBeforeConvert}
-                  setOperationsHistory={setOperationsHistory}
+                    operationsHistory={operationsHistory}
+                    fromCurrency={fromCurrency}
+                    setFromCurrency={setFromCurrency}
+                    setToCurrency={setToCurrency}
+                    toCurrency={toCurrency}
+                    cashAfterConvert={cashAfterConvert}
+                    cashBeforeConvert={cashBeforeConvert}
+                    setOperationsHistory={setOperationsHistory}
                 />;
-            default: return null
+            default:
+                return null
         }
 
     }
-
-
 
 
     return (
