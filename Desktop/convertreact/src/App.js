@@ -1,10 +1,9 @@
-import React, {useState, useEffect, useMemo} from 'react'
+import React, {useState, useEffect} from 'react'
 import './main.css'
-import CurrencySelector from "./components/currencySelector/currencySelector";
 import ConvertorForm from "./components/convertor/convertorForm";
 import ConvertsHistory from "./components/convertsHistory/convertsHistory";
 import axios from 'axios';
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 
 
 export const navigationTabs = [
@@ -17,7 +16,6 @@ export const navigationTabs = [
 ]
 
 
-
 function App() {
     const [currencies, setCurrencies] = useState([]);
     const [fromCurrency, setFromCurrency] = useState();
@@ -25,14 +23,12 @@ function App() {
     const [cashBeforeConvert, setCashBeforeConvert] = useState(0);
     const [cashAfterConvert, setCashAfterConvert] = useState(0);
     const [activeTab, setActiveTab] = useState(navigationTabs[0].name);
-    const [operationsHistory, setOperationsHistory] = useState([]); // эту историю ты выводишь когда активна вторая таба c историей
     const [loader, setLoader] = useState(false);
-    
-    const base_URL = "http://api.exchangeratesapi.io/v1/latest?access_key=bfd8f810c5a8f1cc1c0bfc183a84aea9";
-    const convert_URL = "https://api.m3o.com/v1/currency/Convert?from=FROM_CURRENCY&to=TO_CURRENCY&amount=AMOUNT";
 
+    const base_URL = "http://api.exchangeratesapi.io/v1/latest?access_key=bfd8f810c5a8f1cc1c0bfc183a84aea9";
 
     const dispatch = useDispatch();
+
     async function convertCurrency() {
         setLoader(true);
         await axios.get(`https://api.m3o.com/v1/currency/Convert?from=${fromCurrency}&to=${toCurrency}&amount=${cashBeforeConvert.toString()}`, {
@@ -42,10 +38,13 @@ function App() {
         }).then(res => {
             res.data.amount && setCashAfterConvert(res.data.amount)
             setLoader(false);
-            dispatch({type: "ADD_HISTORY", payload: cashBeforeConvert+fromCurrency+toCurrency+cashAfterConvert})
+            dispatch({
+                type: "ADD_HISTORY",
+                payload: {cashBeforeConvert, fromCurrency, toCurrency, cashAfterConvert: res.data.amount}
+            })
         })
     }
-    
+
     useEffect(() => {
         fetch(base_URL)
             .then(res => res.json())
@@ -58,8 +57,6 @@ function App() {
 
             })
     }, [])
-
-
 
 
     const displayActiveTabContent = () => {
@@ -75,15 +72,11 @@ function App() {
                                       setToCurrency={setToCurrency}
                                       toCurrency={toCurrency}
                                       setCashBeforeConvert={setCashBeforeConvert}
-                                      cashBeforeConvert={cashBeforeConvert} />;
+                                      cashBeforeConvert={cashBeforeConvert}/>;
             case navigationTabs[1].name:
-                return <ConvertsHistory
-                  operationsHistory={operationsHistory}
-                  cashAfterConvert={cashAfterConvert}
-                  cashBeforeConvert={cashBeforeConvert}
-                  setOperationsHistory={setOperationsHistory}
-                />;
-            default: return null
+                return <ConvertsHistory/>;
+            default:
+                return null
         }
 
     }
