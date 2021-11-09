@@ -1,12 +1,14 @@
 import CurrencySelector from "../currencySelector/currencySelector";
 import React from "react";
 import './convertorForm.css';
+import Loader from "../loader/Loader";
 
 const ConvertorForm = ({
                            currencies, cashBeforeConvert,
                            setCashBeforeConvert, fromCurrency,
                            setFromCurrency, toCurrency,
-                           setToCurrency, convertCurrency, cashAfterConvert
+                           setToCurrency, convertCurrency, cashAfterConvert, loader,
+    setLoader
                        }) => {
 
 
@@ -36,9 +38,15 @@ const ConvertorForm = ({
                 </div>
             </div>
             <button className="convert-btn" onClick={convertCurrency}>Конвертировать</button>
-            {!!cashAfterConvert && <div className={'convert-result'}>
-                Результат: {cashAfterConvert}
-            </div>}
+            {loader
+                ? <div className={"loaderDiv"}><Loader/></div>
+                :
+                !!cashAfterConvert && <div className={'convert-result'}>
+                <span> Результат: {cashAfterConvert} </span>
+
+                </div>
+
+            }
         </div>
     );
 };

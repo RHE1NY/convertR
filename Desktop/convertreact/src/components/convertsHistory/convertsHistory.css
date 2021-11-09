@@ -19,7 +19,8 @@
 
 .formach {
     margin-top:20px;
-    border: 1px solid aquamarine;
+    border: 2px solid aquamarine;
+    border-radius: 15px;
     height: auto;
 }
 
@@ -35,6 +36,7 @@
     color:red;
     font-size: 25px;
     font-family: "56th Street" sens;
+    padding: 3px ;
 }
 
 .res {
@@ -43,3 +45,17 @@
     font-family: "56th Street" sens;
 }
 
+.options-enter {
+    opacity: 0;
+}
+.options-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+}
+.options-exit {
+    opacity: 1;
+}
+.options-exit-active {
+    opacity: 0;
+    transition: opacity 500ms ease-in;
+}
